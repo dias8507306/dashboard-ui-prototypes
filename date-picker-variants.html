@@ -1,0 +1,305 @@
+<title>EduApp Date Navigator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: three stacked variant panels; each shows the live control on a mock stats toolbar, UX notes beside it. */
+:root{
+  --bg:#F6F4FC; --panel:#FFFFFF; --panel-2:#FAF8FF; --line:#E9E4F7; --line-2:#DAD2F2;
+  --ink:#1A1530; --ink-2:#4A4466; --muted:#8B85A6;
+  --accent:#7C3AED; --accent-2:#8B5CF6; --accent-soft:rgba(124,58,237,.09); --glow:rgba(124,58,237,.35);
+  --glass:rgba(255,255,255,.62); --glass-line:rgba(124,58,237,.14); --track:rgba(124,58,237,.06);
+  --pop:#FFFFFF; --shadow:0 1px 2px rgba(26,21,48,.05),0 12px 32px -12px rgba(76,56,160,.22);
+  --good:#0E9F4F;
+  --sans:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-family:var(--sans);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#130F24; --panel:#1C1633; --panel-2:#221B3F; --line:#2E2652; --line-2:#3C3269;
+  --ink:#F4F1FF; --ink-2:#CBC4EC; --muted:#9A92C2;
+  --accent:#8B5CF6; --accent-2:#A78BFA; --accent-soft:rgba(167,139,250,.14); --glow:rgba(139,92,246,.5);
+  --glass:rgba(255,255,255,.05); --glass-line:rgba(255,255,255,.10); --track:rgba(0,0,0,.25);
+  --pop:#241D45; --shadow:0 1px 2px rgba(0,0,0,.3),0 18px 40px -14px rgba(0,0,0,.7);
+  --good:#4ADE80; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#130F24; --panel:#1C1633; --panel-2:#221B3F; --line:#2E2652; --line-2:#3C3269;
+  --ink:#F4F1FF; --ink-2:#CBC4EC; --muted:#9A92C2;
+  --accent:#8B5CF6; --accent-2:#A78BFA; --accent-soft:rgba(167,139,250,.14); --glow:rgba(139,92,246,.5);
+  --glass:rgba(255,255,255,.05); --glass-line:rgba(255,255,255,.10); --track:rgba(0,0,0,.25);
+  --pop:#241D45; --shadow:0 1px 2px rgba(0,0,0,.3),0 18px 40px -14px rgba(0,0,0,.7);
+  --good:#4ADE80; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);transition:background .3s,color .3s}
+main{max-width:1040px;margin:0 auto;padding-inline:18px;padding-block:36px 64px;display:grid;gap:22px}
+button{font:inherit}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-size:clamp(24px,3.4vw,32px);font-weight:800;letter-spacing:-.03em;text-wrap:balance}
+.lede{margin:6px 0 0;color:var(--ink-2);max-width:62ch;line-height:1.55}
+.theme{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink-2);height:36px;padding:0 12px;border-radius:10px;
+  display:inline-flex;gap:8px;align-items:center;cursor:pointer;font-weight:600;font-size:13px;transition:all .2s}
+.theme:hover{color:var(--accent);border-color:var(--glass-line)}
+
+.variant{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;background:var(--panel);border:1px solid var(--line);
+  border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+.v-tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.variant h2{margin:4px 0 8px;font-size:19px;letter-spacing:-.02em}
+.variant ul{margin:0;padding-left:18px;color:var(--ink-2);line-height:1.6;font-size:14px;display:grid;gap:4px}
+.stage{border-radius:14px;padding:26px 18px;display:grid;place-items:center;min-height:150px;position:relative;
+  background:radial-gradient(80% 120% at 100% 0%,var(--accent-soft),transparent 60%),var(--panel-2);border:1px dashed var(--line-2)}
+.stage small{position:absolute;left:12px;bottom:8px;font-size:11px;color:var(--muted)}
+.pick-choice{margin-top:12px;font-size:13px;color:var(--muted)}
+.pick-choice b{color:var(--ink)}
+
+.ico{width:16px;height:16px;flex:none}
+.date-text{font-weight:600;font-size:13.5px;font-variant-numeric:tabular-nums;letter-spacing:-.005em;white-space:nowrap}
+.date-sub{font-size:11px;color:var(--muted);font-weight:500}
+
+/* ---------- Variant 1: glass minimal ---------- */
+.v1{display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:12px;background:var(--glass);border:1px solid var(--glass-line);
+  backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);box-shadow:var(--shadow)}
+.v1 .nav,.v1 .center{appearance:none;border:0;background:transparent;color:var(--ink-2);cursor:pointer;border-radius:8px;
+  display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.v1 .nav{width:32px;height:32px;justify-content:center}
+.v1 .center{padding:6px 12px;color:var(--ink)}
+.v1 .nav:hover:not(:disabled),.v1 .center:hover{background:var(--accent-soft);color:var(--accent);box-shadow:0 0 0 1px var(--glass-line),0 0 16px -4px var(--glow)}
+.v1 .center .ico{color:var(--accent)}
+.v1 .nav:disabled{opacity:.3;cursor:default}
+
+/* ---------- Variant 2: segmented buttons ---------- */
+.v2{display:inline-flex;align-items:stretch;gap:6px}
+.v2 .nav,.v2 .center{appearance:none;cursor:pointer;border:1px solid var(--line-2);background:var(--panel);color:var(--ink-2);
+  box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 2px 6px -2px rgba(26,21,48,.12);transition:all .2s}
+.v2 .nav{width:38px;border-radius:11px;display:grid;place-items:center}
+.v2 .center{border-radius:11px;padding:7px 14px 7px 10px;display:inline-flex;align-items:center;gap:10px;text-align:left}
+.v2 .center .cal{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 4px 12px -3px var(--glow)}
+.v2 .center .txt{display:grid;gap:1px}
+.v2 .center .chev{color:var(--muted);transition:transform .2s}
+.v2 .center[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.v2 .center[aria-expanded="true"] .chev{transform:rotate(180deg);color:var(--accent)}
+.v2 .nav:hover:not(:disabled),.v2 .center:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.v2 .nav:active:not(:disabled),.v2 .center:active{transform:scale(.95)}
+.v2 .nav:disabled{opacity:.35;cursor:default}
+
+/* ---------- Variant 3: floating pill with quick picks ---------- */
+.v3{display:inline-flex;align-items:center;gap:6px;padding:5px 6px 5px 5px;border-radius:999px;background:var(--panel);
+  border:1px solid var(--line);box-shadow:0 10px 30px -12px var(--glow),var(--shadow)}
+.v3 .cal{appearance:none;border:0;cursor:pointer;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 0 4px var(--accent-soft),0 0 22px var(--glow);transition:all .2s}
+.v3 .cal:hover{transform:scale(1.06);box-shadow:0 0 0 6px var(--accent-soft),0 0 30px var(--glow)}
+.v3 .label{display:grid;padding:0 4px 0 2px;min-width:118px}
+.v3 .nav{appearance:none;border:0;background:transparent;cursor:pointer;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+  color:var(--ink-2);transition:all .2s}
+.v3 .nav:hover:not(:disabled){background:var(--accent-soft);color:var(--accent)}
+.v3 .nav:disabled{opacity:.3;cursor:default}
+.v3 .quick{display:inline-flex;gap:4px;padding-left:6px;border-left:1px solid var(--line)}
+.v3 .chip{appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--ink-2);cursor:pointer;font-size:12px;font-weight:600;
+  padding:6px 10px;border-radius:999px;transition:all .2s}
+.v3 .chip:hover{border-color:var(--accent);color:var(--accent)}
+.v3 .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px -3px var(--glow)}
+
+/* ---------- Calendar popover (shared by all three) ---------- */
+.pop{position:absolute;z-index:20;width:296px;padding:14px;border-radius:16px;background:var(--pop);border:1px solid var(--line-2);
+  box-shadow:0 24px 60px -18px rgba(20,12,50,.45),0 0 0 1px rgba(255,255,255,.03) inset;
+  transform-origin:top center;animation:popIn .18s cubic-bezier(.2,.8,.2,1)}
+@keyframes popIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.pop-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pop-head b{font-size:14px;font-weight:700;text-transform:capitalize}
+.pop-head button{appearance:none;border:0;background:transparent;color:var(--ink-2);width:30px;height:30px;border-radius:8px;cursor:pointer;
+  display:grid;place-items:center;transition:all .2s}
+.pop-head button:hover:not(:disabled){background:var(--accent-soft);color:var(--accent)}
+.pop-head button:disabled{opacity:.3;cursor:default}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dow span{font-size:11px;color:var(--muted);text-align:center;font-weight:600;padding:4px 0}
+.grid button{appearance:none;border:0;background:transparent;color:var(--ink);height:36px;border-radius:10px;cursor:pointer;
+  font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;position:relative;transition:all .15s}
+.grid button:hover:not(:disabled){background:var(--accent-soft);color:var(--accent)}
+.grid button.out{color:var(--muted);opacity:.45}
+.grid button:disabled{color:var(--muted);opacity:.28;cursor:not-allowed}
+.grid button.today::after{content:"";position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--accent)}
+.grid button.data{font-weight:700}
+.grid button.sel{background:linear-gradient(135deg,var(--accent-2),var(--accent));color:#fff;box-shadow:0 6px 16px -4px var(--glow)}
+.grid button.sel::after{background:#fff}
+.pop-foot{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.pop-foot button{flex:1;appearance:none;border:1px solid var(--line-2);background:transparent;color:var(--ink-2);border-radius:9px;padding:7px 0;
+  font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s}
+.pop-foot button:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.pop-note{margin:8px 0 0;font-size:11px;color:var(--muted);text-align:center}
+
+@media (max-width:760px){ .variant{grid-template-columns:1fr} .v3 .quick{display:none} }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+</style>
+
+<main>
+  <header>
+    <div>
+      <h1>Выбор даты для статистики</h1>
+      <p class="lede">Три варианта переключателя дня. Все живые: листай стрелками, открывай календарь, выбирай день. Статистика хранится с 26 сентября, более ранние дни в календаре недоступны.</p>
+    </div>
+    <button class="theme" id="themeBtn" type="button" aria-label="Переключить тему"><span id="themeIco"></span><span id="themeTxt">Тёмная тема</span></button>
+  </header>
+
+  <section class="variant" aria-labelledby="t1">
+    <div>
+      <span class="v-tag">Вариант 1</span>
+      <h2 id="t1">Стекло и минимализм</h2>
+      <ul>
+        <li>Одна полупрозрачная плашка с размытием фона: лёгкая и не спорит с карточками.</li>
+        <li>Тонкие иконки Lucide; при наведении мягкая фиолетовая подсветка без смены размеров.</li>
+        <li>Клик по дате или иконке календаря открывает календарь.</li>
+        <li>Стрелка «вперёд» гаснет на сегодняшнем дне, «назад» на 26 сентября.</li>
+      </ul>
+      <p class="pick-choice">Выбрано: <b data-out="v1"></b></p>
+    </div>
+    <div class="stage"><div class="v1" data-variant="v1">
+      <button class="nav" data-step="-1" aria-label="Предыдущий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="center" data-open aria-haspopup="dialog" aria-expanded="false"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="date-text" data-label="short"></span></button>
+      <button class="nav" data-step="1" aria-label="Следующий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div><small>на фоне панели статистики</small></div>
+  </section>
+
+  <section class="variant" aria-labelledby="t2">
+    <div>
+      <span class="v-tag">Вариант 2</span>
+      <h2 id="t2">Сегментированные кнопки</h2>
+      <ul>
+        <li>Три отдельные кнопки: большие цели для пальца на телефоне.</li>
+        <li>Стрелки и центр слегка «вдавливаются» при нажатии и приподнимаются при наведении.</li>
+        <li>Центр работает как одна кнопка: иконка, дата, день недели и стрелка ▾ открытия календаря.</li>
+        <li>Открытое состояние видно по фиолетовой рамке и перевёрнутой стрелке.</li>
+      </ul>
+      <p class="pick-choice">Выбрано: <b data-out="v2"></b></p>
+    </div>
+    <div class="stage"><div class="v2" data-variant="v2">
+      <button class="nav" data-step="-1" aria-label="Предыдущий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="center" data-open aria-haspopup="dialog" aria-expanded="false">
+        <span class="cal"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+        <span class="txt"><span class="date-text" data-label="long"></span><span class="date-sub" data-label="rel"></span></span>
+        <svg class="ico chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <button class="nav" data-step="1" aria-label="Следующий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div><small>на фоне панели статистики</small></div>
+  </section>
+
+  <section class="variant" aria-labelledby="t3">
+    <div>
+      <span class="v-tag">Вариант 3</span>
+      <h2 id="t3">Плавающая «таблетка» с быстрым выбором</h2>
+      <ul>
+        <li>Иконка календаря в светящемся круге: главная точка входа, сразу видна.</li>
+        <li>Встроенные кнопки «Сегодня» и «Вчера»: самые частые дни в один клик.</li>
+        <li>Подпись под датой объясняет, что выбрано: «сегодня», «вчера» или «3 дня назад».</li>
+        <li>На телефоне быстрые кнопки прячутся, остаются стрелки и календарь.</li>
+      </ul>
+      <p class="pick-choice">Выбрано: <b data-out="v3"></b></p>
+    </div>
+    <div class="stage"><div class="v3" data-variant="v3">
+      <button class="cal" data-open aria-haspopup="dialog" aria-expanded="false" aria-label="Открыть календарь"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></button>
+      <button class="nav" data-step="-1" aria-label="Предыдущий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+      <span class="label"><span class="date-text" data-label="long"></span><span class="date-sub" data-label="rel"></span></span>
+      <button class="nav" data-step="1" aria-label="Следующий день"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+      <span class="quick"><button class="chip" data-quick="0">Сегодня</button><button class="chip" data-quick="-1">Вчера</button></span>
+    </div><small>на фоне панели статистики</small></div>
+  </section>
+</main>
+
+<div class="pop" id="pop" role="dialog" aria-label="Календарь" hidden>
+  <div class="pop-head">
+    <button type="button" id="prevM" aria-label="Предыдущий месяц"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+    <b id="monthLabel"></b>
+    <button type="button" id="nextM" aria-label="Следующий месяц"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+  </div>
+  <div class="dow"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="pop-foot"><button type="button" data-jump="0">Сегодня</button><button type="button" data-jump="-1">Вчера</button><button type="button" data-jump="-6">Неделю назад</button></div>
+  <p class="pop-note">Жирным — дни со статистикой. Раньше 26 сентября данных нет.</p>
+</div>
+
+<script>
+const DAY = 864e5;
+const strip = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const today = strip(new Date());
+const MIN = new Date(2026, 8, 26);
+const minDay = today < MIN ? today : MIN;
+const clamp = d => d < minDay ? minDay : d > today ? today : d;
+const MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const MONTHS_NOM = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+const DOW = ["вс","пн","вт","ср","чт","пт","сб"];
+const same = (a, b) => a.getTime() === b.getTime();
+const rel = d => { const n = Math.round((today - d) / DAY);
+  return n === 0 ? "сегодня" : n === 1 ? "вчера" : n < 5 ? `${n} дня назад` : `${n} дней назад`; };
+
+const state = {v1: today, v2: today, v3: today};
+
+function render(v){
+  const root = document.querySelector(`[data-variant="${v}"]`), d = state[v];
+  root.querySelectorAll('[data-label="short"]').forEach(e => e.textContent = `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}.${d.getFullYear()}`);
+  root.querySelectorAll('[data-label="long"]').forEach(e => e.textContent = `${DOW[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()]}`);
+  root.querySelectorAll('[data-label="rel"]').forEach(e => e.textContent = rel(d));
+  root.querySelector('[data-step="-1"]').disabled = same(d, minDay);
+  root.querySelector('[data-step="1"]').disabled = same(d, today);
+  root.querySelectorAll("[data-quick]").forEach(c => c.setAttribute("aria-pressed", String(same(d, clamp(new Date(today.getTime() + +c.dataset.quick * DAY))))));
+  document.querySelector(`[data-out="${v}"]`).textContent = `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()} (${rel(d)})`;
+}
+function set(v, d){ state[v] = clamp(strip(d)); render(v); if (openFor === v) drawGrid(); }
+
+document.querySelectorAll("[data-variant]").forEach(root => {
+  const v = root.dataset.variant;
+  root.querySelectorAll("[data-step]").forEach(b => b.addEventListener("click", () => set(v, new Date(state[v].getTime() + +b.dataset.step * DAY))));
+  root.querySelectorAll("[data-quick]").forEach(b => b.addEventListener("click", () => set(v, new Date(today.getTime() + +b.dataset.quick * DAY))));
+  root.querySelector("[data-open]").addEventListener("click", e => { e.stopPropagation(); openFor === v ? closePop() : openPop(v, e.currentTarget); });
+  render(v);
+});
+
+/* ---- calendar popover ---- */
+const pop = document.getElementById("pop"), grid = document.getElementById("grid");
+let openFor = null, trigger = null, view = null;
+function openPop(v, btn){
+  closePop(); openFor = v; trigger = btn; view = new Date(state[v].getFullYear(), state[v].getMonth(), 1);
+  btn.setAttribute("aria-expanded", "true"); pop.hidden = false; drawGrid(); place();
+  (grid.querySelector(".sel") || grid.querySelector("button:not(:disabled)"))?.focus({preventScroll: true});
+}
+function closePop(){ if (trigger) trigger.setAttribute("aria-expanded", "false"); pop.hidden = true; openFor = null; trigger = null; }
+function place(){
+  const r = trigger.getBoundingClientRect(), w = pop.offsetWidth;
+  let left = r.left + r.width / 2 - w / 2 + scrollX;
+  left = Math.max(12 + scrollX, Math.min(left, scrollX + document.documentElement.clientWidth - w - 12));
+  pop.style.left = left + "px"; pop.style.top = (r.bottom + 10 + scrollY) + "px";
+}
+function drawGrid(){
+  const sel = state[openFor], first = view, start = new Date(first.getTime() - ((first.getDay() + 6) % 7) * DAY);
+  document.getElementById("monthLabel").textContent = `${MONTHS_NOM[first.getMonth()]} ${first.getFullYear()}`;
+  document.getElementById("prevM").disabled = first <= new Date(minDay.getFullYear(), minDay.getMonth(), 1);
+  document.getElementById("nextM").disabled = first >= new Date(today.getFullYear(), today.getMonth(), 1);
+  let html = "";
+  for (let i = 0; i < 42; i++){
+    const d = new Date(start.getTime() + i * DAY), day = strip(d);
+    const cls = [day.getMonth() !== first.getMonth() && "out", same(day, today) && "today", same(day, sel) && "sel",
+                 day >= minDay && day <= today && "data"].filter(Boolean).join(" ");
+    const dis = day < minDay || day > today;
+    html += `<button type="button" class="${cls}" data-ts="${day.getTime()}" ${dis ? "disabled" : ""} aria-label="${day.getDate()} ${MONTHS[day.getMonth()]}">${day.getDate()}</button>`;
+  }
+  grid.innerHTML = html;
+}
+grid.addEventListener("click", e => { const b = e.target.closest("button[data-ts]"); if (!b || b.disabled) return;
+  const v = openFor, t = trigger; set(v, new Date(+b.dataset.ts)); closePop(); t?.focus(); });
+document.getElementById("prevM").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); drawGrid(); });
+document.getElementById("nextM").addEventListener("click", () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); drawGrid(); });
+pop.querySelectorAll("[data-jump]").forEach(b => b.addEventListener("click", () => {
+  const v = openFor; set(v, new Date(today.getTime() + +b.dataset.jump * DAY)); closePop(); }));
+pop.addEventListener("click", e => e.stopPropagation());
+document.addEventListener("click", closePop);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && openFor) { const t = trigger; closePop(); t?.focus(); } });
+addEventListener("resize", () => openFor && place());
+
+/* ---- theme toggle for the demo ---- */
+const SUN = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2m-7.07-2.93 1.41-1.41m11.32-11.32 1.41-1.41M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41"/></svg>';
+const MOON = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+const rootEl = document.documentElement;
+const isDark = () => rootEl.dataset.theme ? rootEl.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+function syncTheme(){ const d = isDark(); document.getElementById("themeIco").innerHTML = d ? SUN : MOON;
+  document.getElementById("themeTxt").textContent = d ? "Светлая тема" : "Тёмная тема"; }
+document.getElementById("themeBtn").addEventListener("click", () => { rootEl.dataset.theme = isDark() ? "light" : "dark"; syncTheme(); });
+syncTheme();
+</script>

@@ -1,0 +1,79 @@
+<!doctype html><html lang="kk"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0b1a;--card:#17142a;--surface2:#221e38;--text:#ece9f5;--muted:#a8a3c0;--faint:#77728f;--yellow:#fec200;--orange:#f35b2f;--green:#22c55e}
+*{box-sizing:border-box}body{margin:0;padding:28px;background:#0b0916;font-family:Inter,sans-serif;color:var(--text)}
+h1{margin:0 0 4px;font-size:22px}p.lead{margin:0 0 22px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.lab{font-weight:800;margin:0 0 10px;font-size:15px}.lab span{color:var(--yellow)}
+.card{border-radius:28px;overflow:hidden;background:var(--card);box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+.top{position:relative;height:210px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#2e0f4c,#572ea2 45%,#2857fc)}
+.top:after{content:"";position:absolute;width:300px;height:300px;right:-90px;top:-140px;border-radius:50%;background:radial-gradient(circle,rgba(254,194,0,.4),transparent 70%)}
+.body{padding:18px 20px 22px;text-align:center}
+.badge{display:inline-flex;gap:6px;align-items:center;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(254,194,0,.14);color:var(--yellow)}
+.name{margin:10px 0 6px;font-size:26px;font-weight:800}
+.msg{color:var(--muted);font-size:15px;line-height:1.5;margin:0 0 14px}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}.chips span{padding:7px 12px;border-radius:999px;background:var(--surface2);font-weight:600;font-size:13px}
+.btns{display:flex;gap:10px;justify-content:center}.btns b{padding:11px 16px;border-radius:14px;font-size:14px}.btns .s{background:var(--surface2)}.btns .p{background:linear-gradient(90deg,#572ea2,#2857fc)}
+/* A: progress ring */
+.ring{position:relative;z-index:1;width:150px;height:150px}.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#fff}.ring .c b{display:block;font-size:40px;font-weight:900;line-height:1}.ring .c small{opacity:.8;font-size:12px}
+/* B: rocket trajectory */
+.rk{position:relative;z-index:1;width:100%;height:100%}
+/* C: big quote */
+.q{position:relative;z-index:1;padding:0 26px;color:#fff;text-align:left}.q .mark{font:900 90px/0.6 Georgia,serif;color:var(--yellow);opacity:.9}
+.q p{margin:8px 0 0;font-size:21px;font-weight:800;line-height:1.3}
+/* D: streak flame */
+.fl{position:relative;z-index:1;text-align:center;color:#fff}.fl svg{width:84px;height:84px;filter:drop-shadow(0 10px 22px rgba(243,91,47,.6))}
+.fl b{display:block;font-size:34px;font-weight:900;margin-top:-4px}.fl small{opacity:.85}
+.week{display:flex;gap:6px;justify-content:center;margin-top:8px}.week i{width:22px;height:22px;border-radius:7px;background:rgba(255,255,255,.18);font:700 10px/22px Inter;font-style:normal;color:#fff}.week i.on{background:var(--orange)}
+.texts{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.tcard{background:var(--card);border-radius:22px;padding:20px}.tcard h3{margin:0 0 4px}.tcard p.d{margin:0 0 12px;color:var(--faint);font-size:13px}
+.tcard ul{margin:0;padding-left:18px;display:grid;gap:10px;color:var(--text);line-height:1.45}
+</style></head><body>
+<h1>Күндік мотивация: дизайн нұсқалары</h1><p class="lead">Төменгі бөлігі (аты, мәтін, батырмалар) бәрінде бірдей, өзгеретіні — жоғарғы бөлік. Мысал: Айгерім, бүгін 48 / 100 лид.</p>
+<div class="grid">
+
+<div><p class="lab"><span>A</span> · Прогресс сақинасы</p><div class="card"><div class="top">
+<div class="ring"><svg viewBox="0 0 160 160"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fec200"/><stop offset="1" stop-color="#f35b2f"/></linearGradient></defs>
+<circle cx="80" cy="80" r="66" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="14"/><circle cx="80" cy="80" r="66" fill="none" stroke="url(#rg)" stroke-width="14" stroke-linecap="round" stroke-dasharray="414.7" stroke-dashoffset="215.6"/></svg>
+<div class="c"><div><b>48</b><small>/ 100 лид бүгін</small></div></div></div></div>
+<div class="body"><span class="badge">★ Бүгінгі мақсат</span><div class="name">Айгерім</div><p class="msg">Жартысына жеттің! Қалған 52 лид — бір серпін қашықтықта. Алға!</p>
+<div class="chips"><span>3 күн подряд</span><span>ай 11%</span></div><div class="btns"><b class="s">Тағы мотивация</b><b class="p">Жалғастырамыз →</b></div></div></div></div>
+
+<div><p class="lab"><span>B</span> · Ракета траекториясы</p><div class="card"><div class="top">
+<svg class="rk" viewBox="0 0 320 210"><path d="M30 180 C110 175 150 120 200 90 S280 40 300 30" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path d="M30 180 C110 175 150 120 186 98" fill="none" stroke="#fec200" stroke-width="4" stroke-linecap="round"/>
+<g transform="translate(186 98) rotate(-35)"><path d="M0-22c10 8 12 22 6 34H-6c-6-12-4-26 6-34z" fill="#fff"/><circle cy="-6" r="5" fill="#2857fc"/><path d="M-6 12l-8 8 6 2zM6 12l8 8-6 2z" fill="#f35b2f"/><path d="M-4 14q4 14 8 0z" fill="#fec200"/></g>
+<circle cx="300" cy="30" r="9" fill="none" stroke="#fec200" stroke-width="3"/><text x="248" y="56" fill="#fff" font-family="Inter" font-weight="800" font-size="13">100 лид</text>
+<text x="20" y="200" fill="rgba(255,255,255,.7)" font-family="Inter" font-weight="600" font-size="11">старт</text><text x="150" y="80" fill="#fff" font-family="Inter" font-weight="900" font-size="22">48%</text></svg></div>
+<div class="body"><span class="badge">★ Бүгінгі ұшу</span><div class="name">Айгерім</div><p class="msg">Ракета жолдың жартысында. Тағы бір күш салсаң — мақсатқа қонасың!</p>
+<div class="chips"><span>бүгін 48/100</span><span>ай 11%</span></div><div class="btns"><b class="s">Тағы мотивация</b><b class="p">Жалғастырамыз →</b></div></div></div></div>
+
+<div><p class="lab"><span>C</span> · Үлкен дәйексөз</p><div class="card"><div class="top" style="place-items:center start">
+<div class="q"><div class="mark">“</div><p>Жоспар — бағыт, ал нәтиже — сенің еңбегің.</p></div></div>
+<div class="body"><span class="badge">★ Күн сөзі</span><div class="name">Айгерім</div><p class="msg">Бүгін 48 лид жинадың. Мақсатқа 52 лид қалды — сенің қолыңнан келеді.</p>
+<div class="chips"><span>бүгін 48/100</span><span>ай 11%</span></div><div class="btns"><b class="s">Тағы мотивация</b><b class="p">Жалғастырамыз →</b></div></div></div></div>
+
+<div><p class="lab"><span>D</span> · Streak жалыны</p><div class="card"><div class="top"><div class="fl">
+<svg viewBox="0 0 24 24"><defs><linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fec200"/><stop offset="1" stop-color="#f35b2f"/></linearGradient></defs><path fill="url(#fg)" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+<b>3 күн</b><small>қатарынан жоспар жабылды</small><div class="week"><i class="on">13</i><i class="on">14</i><i class="on">15</i><i>16</i><i>17</i></div></div></div>
+<div class="body"><span class="badge">★ Отты сақта</span><div class="name">Айгерім</div><p class="msg">Бүгін 52 лид қосылса — 4-ші күн, келесі сыйлыққа бір қадам жақындайсың!</p>
+<div class="chips"><span>бүгін 48/100</span><span>сыйлыққа 2 күн</span></div><div class="btns"><b class="s">Тағы мотивация</b><b class="p">Жалғастырамыз →</b></div></div></div></div>
+</div>
+
+<div class="texts">
+<div class="tcard"><h3>1 · Нақты, цифрмен</h3><p class="d">Бүгінгі лид пен жоспарға қарай өзгереді</p><ul>
+<li>Бүгін 48 лид — жартысына жеттің! Қалған 52-сі бір серпін қашықтықта.</li>
+<li>Тағы 10 лид — және 60% белесі сенікі.</li>
+<li>Кешегі нәтижеңнен 12 лид алдасың — қарқын жақсы!</li></ul></div>
+<div class="tcard"><h3>2 · Жылы, қолдау</h3><p class="d">Адам жазғандай, жеке</p><ul>
+<li>Айгерім, сенің еңбегің көрініп тұр. Біз саған сенеміз.</li>
+<li>Әр хабарламаң — бір отбасыға көмек. Бұл маңызды жұмыс.</li>
+<li>Демал да, жалғастыр — бүгін де сенің күнің болады.</li></ul></div>
+<div class="tcard"><h3>3 · Қысқа, серпінді</h3><p class="d">Бір сөйлем, күш береді</p><ul>
+<li>Мақсат жақын — тоқтама!</li>
+<li>Бүгін рекорд күні болуы мүмкін.</li>
+<li>Бір қадам — бір лид — бір жеңіс.</li></ul></div>
+</div>
+</body></html>
